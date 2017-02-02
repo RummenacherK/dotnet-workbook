@@ -7,7 +7,6 @@ namespace VisualStudioFeatures.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /<controller>/
         public IActionResult Index()
         {
             return View(Repository.SharedRepository.GetProducts);

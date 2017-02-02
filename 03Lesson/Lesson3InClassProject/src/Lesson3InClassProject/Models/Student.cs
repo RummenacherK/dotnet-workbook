@@ -11,6 +11,6 @@ namespace Lesson3InClassProject.Models
         public string Name { get; set; }
         public int LevelsId { get; set; }
 
-        public virtual Levels Levels { get; set; }
+        public virtual Levels Levels { get; set; } 
     }
 }

@@ -21,6 +21,7 @@ namespace VisualStudioFeatures
         {
             app.UseBrowserLink();
             app.UseMvcWithDefaultRoute();
+            app.UseStaticFiles();
         }
     }
 }

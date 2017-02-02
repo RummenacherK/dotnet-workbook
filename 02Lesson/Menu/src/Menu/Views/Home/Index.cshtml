@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Menu.Models.MenuModel>
+
+@{ 
+    ViewData["Title"] = "Index";
+}
+
+<h2>Our Big Menu</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sizes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sizes.Price)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(Menu => item.Sizes.Portion)
+            </td>
+            <td>
+                @Html.DisplayFor(Menu => item.Sizes.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(Menu => item.Name )
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
