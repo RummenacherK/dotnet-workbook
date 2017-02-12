@@ -2,41 +2,69 @@
 
 @{
     ViewBag.Title = "Index";
+    SelectList crslist = ViewBag.CourseSelectList;
 }
 
-    <h2>Index</h2>
+<h2>Index</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.fName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EnrollmentDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseId)
+        </th>
+    </tr>
+    <tr>
+        <th>
+            <form method="post" id="filter" action="@Url.Action("Index", "Student")">
+                @Html.DropDownList("courseFilter", crslist, "All", new { @class = "form-control", @style = "width: 16rem; display:inline-block" })
+            </form>
+        </th>
+        <th>
+            @Html.ActionLink("Create New", "Create", "Student", null, new { @class = "btn btn-primary" })
+        </th>
+    </tr>
 
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>
-              
-            </th>
-            <th>
-               
-            </th>
-            <th>
-
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.fName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnrollmentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Label)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
         </tr>
+    }
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                   
-                </td>
-                <td>
-                   
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            </tr>
-        }
+</table>
 
-    </table>
+
+@section scripts
+{
+    <script>
+$(document).ready(function(){
+    $("#courseFilter").change(function () {
+        $("#filter").submit();
+    });
+});
+    </script> 
+}

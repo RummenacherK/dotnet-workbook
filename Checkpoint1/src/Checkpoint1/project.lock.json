@@ -3,6 +3,9 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.0": {
+      "angular-applicationinsights/0.2.8": {
+        "type": "package"
+      },
       "Libuv/1.9.0": {
         "type": "package",
         "dependencies": {
@@ -4105,6 +4108,17 @@
     }
   },
   "libraries": {
+    "angular-applicationinsights/0.2.8": {
+      "sha512": "dH18HsWkU0sr5/TvTnOHl/TZf8hLyU4mSvdVdwDOE3osAdhuo3hk06QB6WlLf5Xn52J/Ppk/AvvHaMeH3yl/OQ==",
+      "type": "package",
+      "path": "angular-applicationinsights/0.2.8",
+      "files": [
+        "angular-applicationinsights.0.2.8.nupkg.sha512",
+        "angular-applicationinsights.nuspec",
+        "content/scripts/angular-applicationinsights.js",
+        "content/scripts/angular-applicationinsights.min.js"
+      ]
+    },
     "Libuv/1.9.0": {
       "sha512": "9Q7AaqtQhS8JDSIvRBt6ODSLWDBI4c8YxNxyCQemWebBFUtBbc6M5Vi5Gz1ZyIUlTW3rZK9bIr5gnVyv0z7a2Q==",
       "type": "package",
@@ -10470,7 +10484,8 @@
       "Microsoft.Extensions.Logging.Debug >= 1.0.0",
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 1.0.0",
       "Microsoft.NETCore.App >= 1.0.1",
-      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0"
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0",
+      "angular-applicationinsights >= 0.2.8"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

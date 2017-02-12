@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0/",
-    "signature": "e6bcf535d7608e3f00bf1eb5c2dd2a4bdafed8e9"
+    "signature": "2111da2b70b41f954308f820bd93984c2820d3ab"
   },
   "compilationOptions": {
     "defines": [
@@ -32,12 +32,14 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
           "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
           "Microsoft.EntityFrameworkCore": "1.0.1",
-          "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1"
+          "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1",
+          "angular-applicationinsights": "0.2.8"
         },
         "compile": {
           "Checkpoint1.dll": {}
         }
       },
+      "angular-applicationinsights/0.2.8": {},
       "Libuv/1.9.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1"
@@ -2815,12 +2817,14 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
           "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
           "Microsoft.EntityFrameworkCore": "1.0.1",
-          "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1"
+          "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1",
+          "angular-applicationinsights": "0.2.8"
         },
         "runtime": {
           "Checkpoint1.dll": {}
         }
       },
+      "angular-applicationinsights/0.2.8": {},
       "Libuv/1.9.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1"
@@ -5483,6 +5487,11 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "angular-applicationinsights/0.2.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dH18HsWkU0sr5/TvTnOHl/TZf8hLyU4mSvdVdwDOE3osAdhuo3hk06QB6WlLf5Xn52J/Ppk/AvvHaMeH3yl/OQ=="
     },
     "Libuv/1.9.0": {
       "type": "package",

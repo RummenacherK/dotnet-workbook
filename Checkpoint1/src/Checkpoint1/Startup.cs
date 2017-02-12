@@ -68,7 +68,7 @@ namespace Checkpoint1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Student}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
 
             });
         }

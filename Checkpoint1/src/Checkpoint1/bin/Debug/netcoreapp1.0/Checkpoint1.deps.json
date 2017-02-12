@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "8b84bbdd8205f140b8c2e58c722a6d269172478a"
+    "signature": "83550815ccedd4e8a142db7d478953fb504b213b"
   },
   "compilationOptions": {
     "defines": [
@@ -32,7 +32,8 @@
           "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
           "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
           "Microsoft.EntityFrameworkCore": "1.0.1",
-          "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1"
+          "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1",
+          "angular-applicationinsights": "0.2.8"
         },
         "runtime": {
           "Checkpoint1.dll": {}
@@ -41,6 +42,7 @@
           "Checkpoint1.dll": {}
         }
       },
+      "angular-applicationinsights/0.2.8": {},
       "Microsoft.ApplicationInsights/2.1.0": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -3496,6 +3498,11 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "angular-applicationinsights/0.2.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dH18HsWkU0sr5/TvTnOHl/TZf8hLyU4mSvdVdwDOE3osAdhuo3hk06QB6WlLf5Xn52J/Ppk/AvvHaMeH3yl/OQ=="
     },
     "Microsoft.ApplicationInsights/2.1.0": {
       "type": "package",
