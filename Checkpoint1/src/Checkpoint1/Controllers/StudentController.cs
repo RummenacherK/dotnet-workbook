@@ -81,6 +81,9 @@ namespace Checkpoint1.Controllers
             }
             var student = db_context.Student.Single(c => c.Id == Id);
 
+            var crs = db_context.Course.OrderBy(c => c.Label).Select(c => new { id = c.Id, value = c.Label }).ToList();
+            ViewBag.CourseSelectList = new SelectList(crs, "id", "value");
+
             return View("Edit", student);
         }
 
@@ -88,12 +91,18 @@ namespace Checkpoint1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Student student)
         {
-            if (ModelState.IsValid)
-            {
 
+            if (ModelState.IsValid)
+            { 
+
+                db_context.Update(student);
                 db_context.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            var crs = db_context.Course.OrderBy(c => c.Label).Select(c => new { id = c.Id, value = c.Label }).ToList();
+            ViewBag.CourseSelectList = new SelectList(crs, "id", "value");
+
             return View("Edit", student);
         }
 
@@ -117,7 +126,7 @@ namespace Checkpoint1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int Id)
+        public ActionResult Delete(int Id)
         {
             Student student = db_context.Student.SingleOrDefault(c => c.Id == Id);
             db_context.Student.Remove(student);

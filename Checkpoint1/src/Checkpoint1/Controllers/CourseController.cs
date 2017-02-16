@@ -65,7 +65,7 @@ namespace Checkpoint1.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                db_context.Update(course);
                 db_context.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -93,7 +93,7 @@ namespace Checkpoint1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int Id)
+        public ActionResult Delete(int Id)
         {
             Course course = db_context.Course.SingleOrDefault(c => c.Id == Id);
             db_context.Course.Remove(course);
