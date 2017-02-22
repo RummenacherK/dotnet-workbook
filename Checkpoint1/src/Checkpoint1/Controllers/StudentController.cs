@@ -18,7 +18,6 @@ namespace Checkpoint1.Controllers
         {
             db_context = context;
         }
-
        
         public IActionResult Index(int? courseFilter = 0)
         {
@@ -42,7 +41,7 @@ namespace Checkpoint1.Controllers
 
         }
 
-       
+       // Create Student  
         public ActionResult Create()
         {
             var crs = db_context.Course.OrderBy(c => c.Label).Select(c => new { id = c.Id, value = c.Label }).ToList();
@@ -52,7 +51,7 @@ namespace Checkpoint1.Controllers
             return View();
         }
 
-        // Create Student      
+            
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Student student)

@@ -44,7 +44,7 @@ namespace Checkpoint1.Controllers
             return RedirectToAction("Index", "Course");
         }
 
-        // GET: Courses/Edit/5
+        // Edit Courses
 
         public ActionResult Edit(int? Id)
         {
@@ -56,8 +56,6 @@ namespace Checkpoint1.Controllers
 
             return View(course);
         }
-
-        // POST: Courses/Edit/5
        
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,7 +70,7 @@ namespace Checkpoint1.Controllers
             return View(course);
         }
 
-        // GET: Courses/Delete/5
+        // Delete Courses
 
         public ActionResult Delete(int? Id)
         {
@@ -88,8 +86,6 @@ namespace Checkpoint1.Controllers
             }
             return View(course);
         }
-
-        // POST: Courses/Delete/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
