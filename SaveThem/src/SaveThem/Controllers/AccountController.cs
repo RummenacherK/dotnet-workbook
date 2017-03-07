@@ -11,6 +11,9 @@ using Microsoft.Extensions.Logging;
 using SaveThem.Models;
 using SaveThem.Models.AccountViewModels;
 using SaveThem.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using SaveThem.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace SaveThem.Controllers
 {
@@ -23,19 +26,82 @@ namespace SaveThem.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
+        private ApplicationDbContext db_context;
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            db_context = context;
         }
+
+        #region
+        // GET: Users/Edit/5
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditUser(string Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+            EditUserViewModel e_user;
+
+            var user = await db_context.Users.Select(u => new EditUserViewModel()
+            {
+                Id = u.Id,
+                Email = u.Email,
+                fName = u.fName,
+                lName = u.lName
+            }).SingleOrDefaultAsync(s => s.Id == Id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            //edit_user = user;
+            // exclude User role
+            ViewBag.Role = new SelectList(db_context.Roles.Where(u => u.Name != "User").ToList(), "Name", "Name");
+            return View(user);
+        }
+
+        // POST: Species/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditUser(EditUserViewModel editUser) //string Id, [Bind("Id,Role")]
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Get user manager
+                    var user = await _userManager.FindByIdAsync(editUser.Id);
+                    await _userManager.AddToRoleAsync(user, editUser.Role);
+                    //db_context.Update(user);
+                    //await db_context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                }
+                return RedirectToAction("Index", "ManageUsers");
+            }
+
+            // exclude User role
+            ViewBag.Role = new SelectList(db_context.Roles.Where(u => u.Name != "User").ToList(), "Name", "Name");
+            return View(editUser);
+        }
+        #endregion
 
         //
         // GET: /Account/Login
@@ -62,6 +128,23 @@ namespace SaveThem.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user != null)
+                    {
+                        var has_claim = false;
+                        var user_claim_list = await _userManager.GetClaimsAsync(user);
+                        if (user_claim_list.Count > 0)
+                        {
+                            has_claim = user_claim_list[0].Type == "FirstName";
+                        }
+
+                        if (!has_claim)
+                        {
+                            await _userManager.AddClaimAsync(user, new Claim("FirstName", user.fName));
+                            await _userManager.AddClaimAsync(user, new Claim("LastName", user.lName));
+                        }
+                    }
+
                     _logger.LogInformation(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -105,10 +188,13 @@ namespace SaveThem.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, fName = model.fName, lName = model.lName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // Set selected Role, all new users get User
+                    await _userManager.AddToRoleAsync(user, "USER");
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

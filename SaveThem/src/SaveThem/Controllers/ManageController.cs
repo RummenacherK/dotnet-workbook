@@ -10,7 +10,7 @@ using SaveThem.Models;
 using SaveThem.Models.ManageViewModels;
 using SaveThem.Services;
 
-namespace SaveThem.Controllers
+namespace EndangeredSpecies.Controllers
 {
     [Authorize]
     public class ManageController : Controller

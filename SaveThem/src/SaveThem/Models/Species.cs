@@ -1,10 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SaveThem.Models
 {
@@ -12,21 +8,21 @@ namespace SaveThem.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]  
+        public int EntityId { get; set; }
         public string SciName { get; set; }
         public string ComName { get; set; }
-       /* public string Status { get; set; }
-        public string StatusTxt { get; set; }
-        public int Country { get; set; }
-        public DateTime ListingDate { get; set; }
-        public string EntityId { get; set; }
-        public string SpeciesCode { get; set; }
-        public int VipCode { get; set; }
-        public string PopAbbreviation { get; set; }
+        public int StatusCodeId { get; set; }
+        public string SpCode { get; set; }
+        public string VipCode { get; set; }
+        public string PopAbbrev { get; set; }
         public string PopDesc { get; set; }
-        public decimal DonationValue { get; set; }
-        public bool IsActive { get; set; } */
+        public int TSN { get; set; }
+        public int CountryCodeId { get; set; }
+        public DateTime ListingDate { get; set; }
 
-        public virtual ICollection<ShoppingCart> ShoppingCart { get; set; }
+        public virtual StatusCode StatusCode { get; set; }
+        public virtual CountryCode CountryCode { get; set; }
+
+        public virtual ICollection<Cart> Cart { get; set; }
     }
 }

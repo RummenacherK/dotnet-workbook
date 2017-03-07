@@ -1,7 +1,7 @@
 ﻿@model SaveThem.Models.Species
 
 @{
-    ViewBag.Title = "Delete";
+    ViewData["Title"] = "Delete";
 }
 
 <h2>Delete</h2>
@@ -12,30 +12,35 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.SciName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SciName)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.ComName)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.ComName)
         </dd>
-
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SciName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SciName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.title)
+        </dd>
     </dl>
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
+    <form asp-action="Delete">
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <a asp-action="Index">Back to List</a>
         </div>
-    }
+    </form>
 </div>

@@ -1,46 +1,57 @@
 ﻿@model SaveThem.Models.Species
 
 @{
-    ViewBag.Title = "Edit";
+    ViewData["Title"] = "Edit";
 }
 
 <h2>Edit</h2>
 
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
+<form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Course</h4>
+        <h4>Species</h4>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
         <div class="form-group">
-            @Html.LabelFor(model => model.SciName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label asp-for="ComName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SciName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SciName, "", new { @class = "text-danger" })
+                <input asp-for="ComName" class="form-control" />
+                <span asp-validation-for="ComName" class="text-danger" />
             </div>
         </div>
-
         <div class="form-group">
-            @Html.LabelFor(model => model.ComName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ComName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ComName, "", new { @class = "text-danger" })
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
             </div>
         </div>
-
+        <div class="form-group">
+            <label asp-for="SciName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="SciName" class="form-control" />
+                <span asp-validation-for="SciName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="title" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger" />
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
-}
+</form>
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

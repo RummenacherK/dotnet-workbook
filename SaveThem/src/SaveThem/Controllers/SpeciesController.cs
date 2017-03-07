@@ -1,104 +1,197 @@
 ﻿using System;
-using SaveThem.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SaveThem.Data;
+using SaveThem.Models;
+using SaveThem.ViewModels;
 
 namespace SaveThem.Controllers
 {
     public class SpeciesController : Controller
     {
-        private ApplicationContext db_context;
+        private EsDbContext db_context;
 
-        public SpeciesController(ApplicationContext context)
+        public SpeciesController(EsDbContext context)
         {
             db_context = context;
         }
 
-        // Species
-
-        public IActionResult Index()
+        // GET: Species
+        public async Task<IActionResult> Index(string searchString, int? page, int statuscodeFilter = 0, int countrycodeFilter = 0)
         {
-            return View(db_context.Species.ToList());
-        }
-        private ActionResult HttpNotFound()
-        {
-            throw new NotImplementedException();
-        }
-
-        // Create Species
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Species species)
-        {
-            db_context.Species.Add(species);
-            db_context.SaveChanges();
-
-            return RedirectToAction("Index", "Species");
-        }
-
-        // Edit Species
-
-        public ActionResult Edit(int? Id)
-        {
-            if (Id == null)
+            if (searchString != null)
             {
-                return HttpNotFound();
+                page = 1;
             }
-            var species = db_context.Species.Single(c => c.Id == Id);
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var cc = db_context.CountryCode.OrderBy(c => c.Label).Select(a => new { id = a.Id, value = a.Label }).ToList();
+            ViewBag.CountryCodeSelectList = new SelectList(cc, "id", "value");
+
+            var sc = db_context.StatusCode.OrderBy(c => c.Label).Select(b => new { id = b.Id, value = b.Label }).ToList();
+            ViewBag.StatusCodeSelectList = new SelectList(sc, "id", "value");
+
+            //IQueryable<Species> species;
+            IQueryable<SpeciesViewModel> speciesVM;
+
+            var species_all = db_context.Species.Select(s => new SpeciesViewModel()
+            {
+                Id = s.Id,
+                ComName = s.ComName,
+                SciName = s.SciName,
+                StatusCodeLabel = s.StatusCode.Label,
+                StatusCodeId = s.StatusCodeId,
+                CountryCodeLabel = s.CountryCode.Label,
+                CountryCodeId = s.CountryCodeId,
+                ListingDate = s.ListingDate
+            });//.Include(a => a.StatusCode).Include(a => a.CountryCode);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                species_all = species_all.Where(s => s.ComName.Contains(searchString)
+                                       || s.SciName.Contains(searchString));
+            }
+
+            if (statuscodeFilter > 0)
+            {
+                speciesVM = species_all.Where(s => s.StatusCodeId == statuscodeFilter);
+            }
+            else
+            {
+                // do nothing, all
+                speciesVM = species_all.Select(s => s);
+            }
+
+            int pageSize = 25;
+            return View(await PaginatedList<SpeciesViewModel>.CreateAsync(speciesVM.AsNoTracking(), page ?? 1, pageSize));
+        }
+
+        // GET: Species/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var species = await db_context.Species.SingleOrDefaultAsync(m => m.Id == id);
+            if (species == null)
+            {
+                return NotFound();
+            }
 
             return View(species);
         }
 
+        // GET: Species/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Species/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Species species)
+        public async Task<IActionResult> Create([Bind("Id,ComName,Name,SciName,title")] Species species)
         {
             if (ModelState.IsValid)
             {
-                db_context.Update(species);
-                db_context.SaveChanges();
+                db_context.Add(species);
+                await db_context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(species);
         }
 
-        // Delete Species
-
-        public ActionResult Delete(int? Id)
+        // GET: Species/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
-            if (Id == null)
+            if (id == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
-            var species = db_context.Species.SingleOrDefault(c => c.Id == Id);
 
+            var species = await db_context.Species.SingleOrDefaultAsync(m => m.Id == id);
             if (species == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
             return View(species);
         }
 
+        // POST: Species/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int Id)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ComName,Name,SciName,title")] Species species)
         {
-            Species species = db_context.Species.SingleOrDefault(c => c.Id == Id);
+            if (id != species.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    db_context.Update(species);
+                    await db_context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!SpeciesExists(species.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return View(species);
+        }
+
+        // GET: Species/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var species = await db_context.Species.SingleOrDefaultAsync(m => m.Id == id);
+            if (species == null)
+            {
+                return NotFound();
+            }
+
+            return View(species);
+        }
+
+        // POST: Species/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var species = await db_context.Species.SingleOrDefaultAsync(m => m.Id == id);
             db_context.Species.Remove(species);
-            db_context.SaveChanges();
+            await db_context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        private bool SpeciesExists(int id)
+        {
+            return db_context.Species.Any(e => e.Id == id);
         }
 
         protected override void Dispose(bool disposing)
